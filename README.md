@@ -37,9 +37,9 @@ Primjer pokretanja modela putem Ollame:
 
 ollama run qwen3:latest
 
-Ako koristiš lokalni model, provjeri da su adresa poslužitelja i port ispravno konfigurirani u datoteci .env ili konfiguracijskim postavkama projekta.
+Ako koristiš lokalni model, provjeri da su adresa poslužitelja i port ispravno konfigurirani u kodu kao ´´´BASE_URL´´´
 
-Napomena: Za korištenje lokalnog modela nije potreban API ključ vanjskog pružatelja usluga, ali model mora biti pokrenut prije pokretanja aplikacije.
+> Napomena: Za korištenje lokalnog modela nije potreban API ključ vanjskog pružatelja usluga, ali model mora biti pokrenut prije pokretanja aplikacije.
 
 
 ## 3. Pokretanje aplikacije
