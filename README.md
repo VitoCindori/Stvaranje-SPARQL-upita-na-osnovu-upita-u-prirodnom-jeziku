@@ -12,6 +12,12 @@ Potom, u korijenskoj mapi projekta otvorite terminal i instalirajte potrebne bib
 pip install -r requirements.txt
 ```
 
+Ako ovo ne radi koristi se druga naredba:
+
+```bash
+py -m pip install -r requirements.txt
+```
+
 ## 2. Konfiguracija API ključeva
 
 Za rad aplikacije potrebno je konfigurirati API ključeve za podržane AI servise.
