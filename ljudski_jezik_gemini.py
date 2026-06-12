@@ -5,8 +5,7 @@ script_dir = os.path.dirname(os.path.abspath(__file__))
 data_path = os.path.join(script_dir, 'data.json')
 
 try:
-    # Inicijalizacija službenog Gemini klijenta
-    # Očekuje okolišnu varijablu GEMINI_API_KEY
+
     client = genai.Client(api_key=os.getenv("API_KEY_GEMINI"))
     print("Gemini klijent uspješno inicijaliziran.")
 except Exception as e:
@@ -16,10 +15,7 @@ except Exception as e:
 with open(data_path, "r", encoding="utf-8") as f:
     BANKA_PRIMJERA = json.load(f)
 
-# Konstanta za model unutar ove datoteke
 MODEL_NAME = "gemini-3.5-flash"
-
-
 
 
 PROMPT_TEMPLATE = """
@@ -30,17 +26,17 @@ The input question (pitanje) will be written in Croatian. However, always genera
 If the question is sent in any other language, still generate the query in English.
 For example, filter uses only english words like forest, energy, sea, ocean...
 
-═══════════════════════════════════════
+
 MANDATORY PREFIXES (always include all that are used):
-═══════════════════════════════════════
+
 PREFIX dcat: <http://www.w3.org/ns/dcat#>
 PREFIX dct: <http://purl.org/dc/terms/>
 PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 PREFIX foaf: <http://xmlns.com/foaf/0.1/>
 
-═══════════════════════════════════════
+
 CORE STRUCTURE:
-═══════════════════════════════════════
+
 Every dataset is: ?dataset a dcat:Dataset .
 
 FIELDS:
@@ -56,35 +52,35 @@ FIELDS:
 - Language:      ?dataset dct:language ?language .
 Use these when user asks you for them, but do NOT use them in the query if user does not ask for them
 
-═══════════════════════════════════════
-IMPORTANT RULES FOR VIRTUOSO SPARQL:
-═══════════════════════════════════════
-✓ Use LCASE() instead of LOWER() or LOWERCASE()
-✓ Text search:  FILTER(CONTAINS(LCASE(STR(?title)), "keyword"))
-✓ Description:  FILTER(CONTAINS(LCASE(STR(?description)), "keyword"))
-✓ Language:     FILTER(LANG(?title) = "en")
-✓ Date range:   FILTER(?issued >= "2020-01-01"^^xsd:date && ?issued <= "2023-12-31"^^xsd:date)
-✓ Date after:   FILTER(?issued > "2020-12-31"^^xsd:date)
-✓ OR filter:    FILTER(CONTAINS(..., "word1") || CONTAINS(..., "word2"))
-✓ AND filter:   FILTER(CONTAINS(..., "word1") && CONTAINS(..., "word2"))
-✓ Optional:     OPTIONAL {{ ?dataset dct:description ?description . }}
-✓ Count:        SELECT (COUNT(?dataset) AS ?total)
-✓ Sort:         ORDER BY DESC(?issued)
-✓ Always retrieve variables first THEN apply filters
-✓ Short acronyms: REGEX(LCASE(STR(?title)), "(^|\\\\s)ai(\\\\s|$)") — use for keywords ≤3 letters to avoid partial matches (e.g. "ai" matching "obtained")
-✓ Combine:  FILTER(CONTAINS(LCASE(STR(?title)), "artificial intelligence") || REGEX(LCASE(STR(?title)), "(^|\\\\s)ai(\\\\s|$)"))
 
-✗ NEVER use LOWER() or LOWERCASE()
-✗ NEVER use || for string concatenation
-✗ NEVER filter a variable before binding it
-✗ NEVER use foaf: or void: unless explicitly needed
-✗ NEVER use uppercase in CONTAINS keywords — LCASE converts everything to lowercase
+IMPORTANT RULES FOR VIRTUOSO SPARQL:
+
+Use LCASE() instead of LOWER() or LOWERCASE()
+Text search:  FILTER(CONTAINS(LCASE(STR(?title)), "keyword"))
+Description:  FILTER(CONTAINS(LCASE(STR(?description)), "keyword"))
+Language:     FILTER(LANG(?title) = "en")
+Date range:   FILTER(?issued >= "2020-01-01"^^xsd:date && ?issued <= "2023-12-31"^^xsd:date)
+Date after:   FILTER(?issued > "2020-12-31"^^xsd:date)
+OR filter:    FILTER(CONTAINS(..., "word1") || CONTAINS(..., "word2"))
+AND filter:   FILTER(CONTAINS(..., "word1") && CONTAINS(..., "word2"))
+Optional:     OPTIONAL {{ ?dataset dct:description ?description . }}
+Count:        SELECT (COUNT(?dataset) AS ?total)
+Sort:         ORDER BY DESC(?issued)
+Always retrieve variables first THEN apply filters
+Short acronyms: REGEX(LCASE(STR(?title)), "(^|\\\\s)ai(\\\\s|$)") — use for keywords ≤3 letters to avoid partial matches (e.g. "ai" matching "obtained")
+Combine:  FILTER(CONTAINS(LCASE(STR(?title)), "artificial intelligence") || REGEX(LCASE(STR(?title)), "(^|\\\\s)ai(\\\\s|$)"))
+
+NEVER use LOWER() or LOWERCASE()
+NEVER use || for string concatenation
+NEVER filter a variable before binding it
+NEVER use foaf: or void: unless explicitly needed
+NEVER use uppercase in CONTAINS keywords — LCASE converts everything to lowercase
   WRONG: CONTAINS(LCASE(STR(?title)), "AIDS")
   RIGHT: CONTAINS(LCASE(STR(?title)), "aids")
-═══════════════════════════════════════
+
 URI SHORTCUTS (use simultaneously with FILTER when possible — faster and more precise!):
 Do not use them in filter with CONTAINS, use them directly in triple pattern:
-═══════════════════════════════════════
+
 COUNTRIES (dct:spatial):
 - Croatia:  <http://publications.europa.eu/resource/authority/country/HRV>
 - Germany:  <http://publications.europa.eu/resource/authority/country/DEU>
@@ -98,66 +94,66 @@ FILE FORMATS (dct:format on distribution):
 - <http://publications.europa.eu/resource/authority/file-type/XML>
 - <http://publications.europa.eu/resource/authority/file-type/PDF>
 
-═══════════════════════════════════════
+
 THEME URI (use this instead of text search for theme!):
-═══════════════════════════════════════
+
 WHEN a theme is detected, use URI directly — do NOT use CONTAINS for theme:
   ?dataset dcat:theme <http://publications.europa.eu/resource/authority/data-theme/CODE> .
 
 Detected theme for this question:
 {teme_odgovor}
 Use this anytime you detect the theme in the question
-═══════════════════════════════════════
+
 DECISION LOGIC:
-═══════════════════════════════════════
+
 IF theme is detected BUT the question mentions a specific subtopic 
 (e.g. "narcotics", "cancer", "solar energy"):
-  → use dcat:theme URI for the broad theme
-  → AND add FILTER(CONTAINS(LCASE(STR(?title)), "specific_keyword")) 
+  use dcat:theme URI for the broad theme
+  AND add FILTER(CONTAINS(LCASE(STR(?title)), "specific_keyword")) 
     to narrow down results
-  → consider OPTIONAL description filter as well
+  consider OPTIONAL description filter as well
 
 IF question mentions a country:
-  → use dct:spatial URI instead of CONTAINS on title
+  use dct:spatial URI instead of CONTAINS on title
 
 IF theme is detected (see above):
-  → ALWAYS use dcat:theme URI for the broad category
-  → ALWAYS ALSO add FILTER with the most specific keyword from the question translated to English
-  → NEVER use the theme URI alone — a theme covers thousands of unrelated datasets
-  → The keyword must be the SPECIFIC topic, NOT the theme name itself
-    WRONG: theme=SOCI → FILTER keyword="family" (too broad)
-    RIGHT:  theme=SOCI + question="obiteljsko nasilje" → FILTER keyword="domestic violence"
-    RIGHT:  theme=HEAL + question="rak pluća" → FILTER keyword="lung cancer"
-    RIGHT:  theme=ENVI + question="onečišćenje rijeka" → FILTER keyword="river pollution"
-  → Translate the specific keyword to English, use synonyms with OR if needed
+  ALWAYS use dcat:theme URI for the broad category
+  ALWAYS ALSO add FILTER with the most specific keyword from the question translated to English
+  NEVER use the theme URI alone — a theme covers thousands of unrelated datasets
+  The keyword must be the SPECIFIC topic, NOT the theme name itself
+    WRONG: theme=SOCI > FILTER keyword="family" (too broad)
+    RIGHT:  theme=SOCI + question="obiteljsko nasilje" FILTER keyword="domestic violence"
+    RIGHT:  theme=HEAL + question="rak pluća" FILTER keyword="lung cancer"
+    RIGHT:  theme=ENVI + question="onečišćenje rijeka" FILTER keyword="river pollution"
+  Translate the specific keyword to English, use synonyms with OR if needed
   
 IF question asks for description:
-  → add OPTIONAL {{ ?dataset dct:description ?description . }}
-  → add FILTER(LANG(?description) = "en")
+   add OPTIONAL {{ ?dataset dct:description ?description . }}
+   add FILTER(LANG(?description) = "en")
 
 IF question asks between two dates:
-  → use >= and <= with ^^xsd:date
+   use >= and <= with ^^xsd:date
 
 IF question asks to count:
-  → use SELECT (COUNT(?dataset) AS ?total)
+   use SELECT (COUNT(?dataset) AS ?total)
 
 IF question asks to sort:
-  → use ORDER BY DESC(?issued) or ORDER BY ASC(?issued)
+   use ORDER BY DESC(?issued) or ORDER BY ASC(?issued)
 
 IF the question mentions a specific substance or topic:
-  → translate to multiple English synonyms and use OR between them
-  → e.g. "narkotici" → "narcotic" || "drug" || "controlled substance"
-═══════════════════════════════════════
+   translate to multiple English synonyms and use OR between them
+   e.g. "narkotici"  "narcotic" || "drug" || "controlled substance"
+
 ONE-SHOT EXAMPLE (most similar to your question):
-═══════════════════════════════════════
+
 Question: {data_pitanje}
 SPARQL:
 {data_sparql}
 
 this is an exaple of how your SPARQL query should look, if you need to add more thing add them
-═══════════════════════════════════════
+
 USER QUESTION:
-═══════════════════════════════════════
+
 {pitanje}
 
 Generate ONLY the SPARQL query without additional explanations.
@@ -245,18 +241,18 @@ Your task is to find the most structurally similar question from the bank of exa
 IMPORTANT RULES:
 - Ignore specific topics, countries, keywords (e.g. "Croatia", "COVID", "energy")
 - Focus ONLY on the SPARQL structure needed:
-  * Does it filter by date range? (between X and Y) (HIGH)
-  * Does it filter by date after/before? (HIGH)
-  * Does it need description field? (LOW)
-  * Does it use OR between keywords? (LOW)
-  * Does it need publisher/format? (MEDIUM)
-  * Does it count results? (LOW)
-  * Does it sort by date? (HIGH)
-  * What is the LIMIT? (LOW)
+  Does it filter by date range? (between X and Y) (HIGH)
+  Does it filter by date after/before? (HIGH)
+  Does it need description field? (LOW)
+  Does it use OR between keywords? (LOW)
+  Does it need publisher/format? (MEDIUM)
+  Does it count results? (LOW)
+  Does it sort by date? (HIGH)
+  What is the LIMIT? (LOW)
 
 In other words:
-- date_range match → automatic winner, ignore everything else
-- if no date_range match exists → then look at description, date_after...
+- date_range match automatic winner, ignore everything else
+- if no date_range match exists then look at description, date_after...
 - never pick a match based only on keyword_search or limit
 BANK OF EXAMPLES:
 {banka_primjera}
@@ -292,7 +288,6 @@ THEMES:
 return ONLY the 4-letter code of the most relevant theme, without any additional text or explanation.
 if the question does not clearly match any theme, return "this query does not match any theme" (for "none") and dont use uri for theme.
 """
-
 
 def detect_theme(pitanje, teme=TEME):
     detailed_prompt = URI_CREATION_PROMPT.format(pitanje=pitanje, teme=teme)

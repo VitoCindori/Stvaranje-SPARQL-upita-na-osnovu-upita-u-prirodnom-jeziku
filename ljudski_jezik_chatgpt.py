@@ -1,4 +1,3 @@
-# ... (GORE OSTAVITI SVE TVOJE PROMPT-OVE I VARIJABLE NETAKNUTE: TEME, PROMPT_TEMPLATE, itd.) ...
 
 import openai
 import json
@@ -7,8 +6,6 @@ script_dir = os.path.dirname(os.path.abspath(__file__))
 data_path = os.path.join(script_dir, 'data.json')
 
 try:
-    # Inicijalizacija OpenAI klijenta
-    # Očekuje okolišnu varijablu OPENAI_API_KEY
     client = openai.OpenAI(api_key=os.getenv("API_KEY_GPT"))
     print("OpenAI klijent uspješno inicijaliziran.")
 except Exception as e:
@@ -18,7 +15,6 @@ except Exception as e:
 with open(data_path, "r", encoding="utf-8") as f:
     BANKA_PRIMJERA = json.load(f)
 
-# Konstanta za model unutar ove datoteke
 MODEL_NAME = "gpt-5.4-mini"
 
 PROMPT_TEMPLATE = """
@@ -124,28 +120,28 @@ IF theme is detected (see above):
   ALWAYS ALSO add FILTER with the most specific keyword from the question translated to English
   NEVER use the theme URI alone — a theme covers thousands of unrelated datasets
   The keyword must be the SPECIFIC topic, NOT the theme name itself
-    WRONG: theme=SOCI → FILTER keyword="family" (too broad)
-    RIGHT:  theme=SOCI + question="obiteljsko nasilje" → FILTER keyword="domestic violence"
-    RIGHT:  theme=HEAL + question="rak pluća" → FILTER keyword="lung cancer"
-    RIGHT:  theme=ENVI + question="onečišćenje rijeka" → FILTER keyword="river pollution"
+    WRONG: theme=SOCI > FILTER keyword="family" (too broad)
+    RIGHT:  theme=SOCI + question="obiteljsko nasilje" FILTER keyword="domestic violence"
+    RIGHT:  theme=HEAL + question="rak pluća" FILTER keyword="lung cancer"
+    RIGHT:  theme=ENVI + question="onečišćenje rijeka" FILTER keyword="river pollution"
   Translate the specific keyword to English, use synonyms with OR if needed
   
 IF question asks for description:
-  → add OPTIONAL {{ ?dataset dct:description ?description . }}
-  → add FILTER(LANG(?description) = "en")
+   add OPTIONAL {{ ?dataset dct:description ?description . }}
+   add FILTER(LANG(?description) = "en")
 
 IF question asks between two dates:
-  → use >= and <= with ^^xsd:date
+   use >= and <= with ^^xsd:date
 
 IF question asks to count:
-  → use SELECT (COUNT(?dataset) AS ?total)
+   use SELECT (COUNT(?dataset) AS ?total)
 
 IF question asks to sort:
-  → use ORDER BY DESC(?issued) or ORDER BY ASC(?issued)
+   use ORDER BY DESC(?issued) or ORDER BY ASC(?issued)
 
 IF the question mentions a specific substance or topic:
-  → translate to multiple English synonyms and use OR between them
-  → e.g. "narkotici" → "narcotic" || "drug" || "controlled substance"
+   translate to multiple English synonyms and use OR between them
+   e.g. "narkotici"  "narcotic" || "drug" || "controlled substance"
 
 ONE-SHOT EXAMPLE (most similar to your question):
 
@@ -254,8 +250,8 @@ IMPORTANT RULES:
   What is the LIMIT? (LOW)
 
 In other words:
-- date_range match → automatic winner, ignore everything else
-- if no date_range match exists → then look at description, date_after...
+- date_range match automatic winner, ignore everything else
+- if no date_range match exists then look at description, date_after...
 - never pick a match based only on keyword_search or limit
 BANK OF EXAMPLES:
 {banka_primjera}

@@ -12,17 +12,17 @@ The input question (pitanje) will be written in Croatian. However, always genera
 If the question is sent in any other language, still generate the query in English.
 For example, filter uses only english words like forest, energy, sea, ocean...
 
-═══════════════════════════════════════
+
 MANDATORY PREFIXES (always include all that are used):
-═══════════════════════════════════════
+
 PREFIX dcat: <http://www.w3.org/ns/dcat#>
 PREFIX dct: <http://purl.org/dc/terms/>
 PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 PREFIX foaf: <http://xmlns.com/foaf/0.1/>
 
-═══════════════════════════════════════
+
 CORE STRUCTURE:
-═══════════════════════════════════════
+
 Every dataset is: ?dataset a dcat:Dataset .
 
 FIELDS:
@@ -38,35 +38,35 @@ FIELDS:
 - Language:      ?dataset dct:language ?language .
 Use these when user asks you for them, but do NOT use them in the query if user does not ask for them
 
-═══════════════════════════════════════
-IMPORTANT RULES FOR VIRTUOSO SPARQL:
-═══════════════════════════════════════
-✓ Use LCASE() instead of LOWER() or LOWERCASE()
-✓ Text search:  FILTER(CONTAINS(LCASE(STR(?title)), "keyword"))
-✓ Description:  FILTER(CONTAINS(LCASE(STR(?description)), "keyword"))
-✓ Language:     FILTER(LANG(?title) = "en")
-✓ Date range:   FILTER(?issued >= "2020-01-01"^^xsd:date && ?issued <= "2023-12-31"^^xsd:date)
-✓ Date after:   FILTER(?issued > "2020-12-31"^^xsd:date)
-✓ OR filter:    FILTER(CONTAINS(..., "word1") || CONTAINS(..., "word2"))
-✓ AND filter:   FILTER(CONTAINS(..., "word1") && CONTAINS(..., "word2"))
-✓ Optional:     OPTIONAL {{ ?dataset dct:description ?description . }}
-✓ Count:        SELECT (COUNT(?dataset) AS ?total)
-✓ Sort:         ORDER BY DESC(?issued)
-✓ Always retrieve variables first THEN apply filters
-✓ Short acronyms: REGEX(LCASE(STR(?title)), "(^|\\\\s)ai(\\\\s|$)") — use for keywords ≤3 letters to avoid partial matches (e.g. "ai" matching "obtained")
-✓ Combine:  FILTER(CONTAINS(LCASE(STR(?title)), "artificial intelligence") || REGEX(LCASE(STR(?title)), "(^|\\\\s)ai(\\\\s|$)"))
 
-✗ NEVER use LOWER() or LOWERCASE()
-✗ NEVER use || for string concatenation
-✗ NEVER filter a variable before binding it
-✗ NEVER use foaf: or void: unless explicitly needed
-✗ NEVER use uppercase in CONTAINS keywords — LCASE converts everything to lowercase
+IMPORTANT RULES FOR VIRTUOSO SPARQL:
+
+Use LCASE() instead of LOWER() or LOWERCASE()
+Text search:  FILTER(CONTAINS(LCASE(STR(?title)), "keyword"))
+Description:  FILTER(CONTAINS(LCASE(STR(?description)), "keyword"))
+Language:     FILTER(LANG(?title) = "en")
+Date range:   FILTER(?issued >= "2020-01-01"^^xsd:date && ?issued <= "2023-12-31"^^xsd:date)
+Date after:   FILTER(?issued > "2020-12-31"^^xsd:date)
+OR filter:    FILTER(CONTAINS(..., "word1") || CONTAINS(..., "word2"))
+AND filter:   FILTER(CONTAINS(..., "word1") && CONTAINS(..., "word2"))
+Optional:     OPTIONAL {{ ?dataset dct:description ?description . }}
+Count:        SELECT (COUNT(?dataset) AS ?total)
+Sort:         ORDER BY DESC(?issued)
+Always retrieve variables first THEN apply filters
+Short acronyms: REGEX(LCASE(STR(?title)), "(^|\\\\s)ai(\\\\s|$)") — use for keywords ≤3 letters to avoid partial matches (e.g. "ai" matching "obtained")
+Combine:  FILTER(CONTAINS(LCASE(STR(?title)), "artificial intelligence") || REGEX(LCASE(STR(?title)), "(^|\\\\s)ai(\\\\s|$)"))
+
+NEVER use LOWER() or LOWERCASE()
+NEVER use || for string concatenation
+NEVER filter a variable before binding it
+NEVER use foaf: or void: unless explicitly needed
+NEVER use uppercase in CONTAINS keywords — LCASE converts everything to lowercase
   WRONG: CONTAINS(LCASE(STR(?title)), "AIDS")
   RIGHT: CONTAINS(LCASE(STR(?title)), "aids")
-═══════════════════════════════════════
+
 URI SHORTCUTS (use simultaneously with FILTER when possible — faster and more precise!):
 Do not use them in filter with CONTAINS, use them directly in triple pattern:
-═══════════════════════════════════════
+
 COUNTRIES (dct:spatial):
 - Croatia:  <http://publications.europa.eu/resource/authority/country/HRV>
 - Germany:  <http://publications.europa.eu/resource/authority/country/DEU>
@@ -80,66 +80,66 @@ FILE FORMATS (dct:format on distribution):
 - <http://publications.europa.eu/resource/authority/file-type/XML>
 - <http://publications.europa.eu/resource/authority/file-type/PDF>
 
-═══════════════════════════════════════
+
 THEME URI (use this instead of text search for theme!):
-═══════════════════════════════════════
+
 WHEN a theme is detected, use URI directly — do NOT use CONTAINS for theme:
   ?dataset dcat:theme <http://publications.europa.eu/resource/authority/data-theme/CODE> .
 
 Detected theme for this question:
 {teme_odgovor}
 Use this anytime you detect the theme in the question
-═══════════════════════════════════════
+
 DECISION LOGIC:
-═══════════════════════════════════════
+
 IF theme is detected BUT the question mentions a specific subtopic 
 (e.g. "narcotics", "cancer", "solar energy"):
-  → use dcat:theme URI for the broad theme
-  → AND add FILTER(CONTAINS(LCASE(STR(?title)), "specific_keyword")) 
+  use dcat:theme URI for the broad theme
+  AND add FILTER(CONTAINS(LCASE(STR(?title)), "specific_keyword")) 
     to narrow down results
-  → consider OPTIONAL description filter as well
+  consider OPTIONAL description filter as well
 
 IF question mentions a country:
-  → use dct:spatial URI instead of CONTAINS on title
+  use dct:spatial URI instead of CONTAINS on title
 
 IF theme is detected (see above):
-  → ALWAYS use dcat:theme URI for the broad category
-  → ALWAYS ALSO add FILTER with the most specific keyword from the question translated to English
-  → NEVER use the theme URI alone — a theme covers thousands of unrelated datasets
-  → The keyword must be the SPECIFIC topic, NOT the theme name itself
-    WRONG: theme=SOCI → FILTER keyword="family" (too broad)
-    RIGHT:  theme=SOCI + question="obiteljsko nasilje" → FILTER keyword="domestic violence"
-    RIGHT:  theme=HEAL + question="rak pluća" → FILTER keyword="lung cancer"
-    RIGHT:  theme=ENVI + question="onečišćenje rijeka" → FILTER keyword="river pollution"
-  → Translate the specific keyword to English, use synonyms with OR if needed
+  ALWAYS use dcat:theme URI for the broad category
+  ALWAYS ALSO add FILTER with the most specific keyword from the question translated to English
+  NEVER use the theme URI alone — a theme covers thousands of unrelated datasets
+  The keyword must be the SPECIFIC topic, NOT the theme name itself
+    WRONG: theme=SOCI > FILTER keyword="family" (too broad)
+    RIGHT:  theme=SOCI + question="obiteljsko nasilje" FILTER keyword="domestic violence"
+    RIGHT:  theme=HEAL + question="rak pluća" FILTER keyword="lung cancer"
+    RIGHT:  theme=ENVI + question="onečišćenje rijeka" FILTER keyword="river pollution"
+  Translate the specific keyword to English, use synonyms with OR if needed
   
 IF question asks for description:
-  → add OPTIONAL {{ ?dataset dct:description ?description . }}
-  → add FILTER(LANG(?description) = "en")
+   add OPTIONAL {{ ?dataset dct:description ?description . }}
+   add FILTER(LANG(?description) = "en")
 
 IF question asks between two dates:
-  → use >= and <= with ^^xsd:date
+   use >= and <= with ^^xsd:date
 
 IF question asks to count:
-  → use SELECT (COUNT(?dataset) AS ?total)
+   use SELECT (COUNT(?dataset) AS ?total)
 
 IF question asks to sort:
-  → use ORDER BY DESC(?issued) or ORDER BY ASC(?issued)
+   use ORDER BY DESC(?issued) or ORDER BY ASC(?issued)
 
 IF the question mentions a specific substance or topic:
-  → translate to multiple English synonyms and use OR between them
-  → e.g. "narkotici" → "narcotic" || "drug" || "controlled substance"
-═══════════════════════════════════════
+   translate to multiple English synonyms and use OR between them
+   e.g. "narkotici"  "narcotic" || "drug" || "controlled substance"
+
 ONE-SHOT EXAMPLE (most similar to your question):
-═══════════════════════════════════════
+
 Question: {data_pitanje}
 SPARQL:
 {data_sparql}
 
 this is an exaple of how your SPARQL query should look, if you need to add more thing add them
-═══════════════════════════════════════
+
 USER QUESTION:
-═══════════════════════════════════════
+
 {pitanje}
 
 Generate ONLY the SPARQL query without additional explanations.
@@ -165,7 +165,6 @@ GENERATED SPARQL QUERY:
 ```sparql
 {originalni_upit}
 """
-
 
 CORRECTION_PROMPT_TEMPLATE = """
 You are an expert SPARQL developer for the EU Open Data Portal.
@@ -228,18 +227,18 @@ Your task is to find the most structurally similar question from the bank of exa
 IMPORTANT RULES:
 - Ignore specific topics, countries, keywords (e.g. "Croatia", "COVID", "energy")
 - Focus ONLY on the SPARQL structure needed:
-  * Does it filter by date range? (between X and Y) (HIGH)
-  * Does it filter by date after/before? (HIGH)
-  * Does it need description field? (LOW)
-  * Does it use OR between keywords? (LOW)
-  * Does it need publisher/format? (MEDIUM)
-  * Does it count results? (LOW)
-  * Does it sort by date? (HIGH)
-  * What is the LIMIT? (LOW)
+  Does it filter by date range? (between X and Y) (HIGH)
+  Does it filter by date after/before? (HIGH)
+  Does it need description field? (LOW)
+  Does it use OR between keywords? (LOW)
+  Does it need publisher/format? (MEDIUM)
+  Does it count results? (LOW)
+  Does it sort by date? (HIGH)
+  What is the LIMIT? (LOW)
 
 In other words:
-- date_range match → automatic winner, ignore everything else
-- if no date_range match exists → then look at description, date_after...
+- date_range match automatic winner, ignore everything else
+- if no date_range match exists then look at description, date_after...
 - never pick a match based only on keyword_search or limit
 BANK OF EXAMPLES:
 {banka_primjera}
@@ -276,9 +275,6 @@ return ONLY the 4-letter code of the most relevant theme, without any additional
 if the question does not clearly match any theme, return "this query does not match any theme" (for "none") and dont use uri for theme.
 """
 
-# VAŽNO: 
-# Ako pokrećeš kod UNUTAR Colaba, ostavi "http://localhost:11434/v1"
-# Ako pokrećeš kod s RAČUNALA, zamijeni s URL-om iz Localtunnela (npr. "https://xxxx.loca.lt/v1")
 BASE_URL = "http://localhost:11434/v1" 
 
 try:
@@ -287,11 +283,11 @@ try:
         api_key="ollama",
         default_headers={
             "ngrok-skip-browser-warning": "true",
-            "Bypass-Tunnel-Reminder": "true"  # Zadrži i ovo za svaki slučaj
+            "Bypass-Tunnel-Reminder": "true" 
         },
         timeout=120.0
     )
-    print(f"Ollama (Qwen) klijent uspješno inicijaliziran na {BASE_URL}")
+    print(f"Ollama klijent uspješno inicijaliziran na {BASE_URL}")
 except Exception as e:
     print(f"Greška pri inicijalizaciji Ollama klijenta: {e}")
     exit()
@@ -299,12 +295,11 @@ except Exception as e:
 with open(data_path, "r", encoding="utf-8") as f:
     BANKA_PRIMJERA = json.load(f)
 
-# Model koji si povukao preko 'ollama pull'
 MODEL_NAME = "llama3.1:8b"
 
 
 def _pozovi_qwen(prompt):
-    """Pomoćna funkcija za slanje upita lokalnom Qwen modelu."""
+    """Pomoćna funkcija za slanje upita lokalnom modelu."""
     response = client.chat.completions.create(
         model=MODEL_NAME, 
         messages=[{"role": "user", "content": prompt}], 
@@ -318,12 +313,12 @@ def detect_theme(pitanje, teme=TEME):
     try:
         return _pozovi_qwen(detailed_prompt).strip()
     except Exception as e:
-        print(f"❌ Greška pri detekciji teme (Qwen): {e}")
+        print(f"Greška pri detekciji teme: {e}")
         return "this query does not match any theme"
 
 
 def similarity_base_upit(banka_primjera, pitanje):
-    print(f"\nProvjeri najslicnije pitanje '{pitanje}' pomoću Qwen modela")
+    print(f"\nProvjeri najslicnije pitanje '{pitanje}' pomoću modela")
     detailed_prompt = SIMILARITY_BASE_ONE_SHOT_PROMPT_TEMPLATE.format(
         banka_primjera=banka_primjera, pitanje=pitanje
     )
@@ -334,14 +329,14 @@ def similarity_base_upit(banka_primjera, pitanje):
                 return entry["sparql"], entry["pitanje"]
         return None, None
     except Exception as e:
-        print(f"❌ Greška pri provjeri sličnosti (Qwen): {e}")
+        print(f"Greška pri provjeri sličnosti: {e}")
         return None, None
 
 
 def generiraj_sparql(pitanje):
     data_sparql, data_pitanje = similarity_base_upit(BANKA_PRIMJERA, pitanje)
     if data_sparql is None or data_pitanje is None:
-        print("⚠️ Nema odgovarajućeg primjera u bazi primjera. Generiram SPARQL izravno.")
+        print("Nema odgovarajućeg primjera u bazi primjera. Generiram SPARQL izravno.")
         data_sparql = ""
         data_pitanje = ""
     teme_odgovor = detect_theme(pitanje, TEME)
@@ -359,12 +354,12 @@ def generiraj_sparql(pitanje):
             sparql_kod = ai_odgovor
         return sparql_kod.strip()
     except Exception as e:
-        print(f"❌ Greška pri generiranju SPARQL-a (Qwen): {e}")
+        print(f"Greška pri generiranju SPARQL-a: {e}")
         return None
 
 
 def ispravi_sparql(originalni_upit, poruka_greske, pitanje):
-    print("\n🔧 Pokušavam ispraviti upit na temelju greške (Qwen)...")
+    print("\nPokušavam ispraviti upit na temelju greške ...")
     prompt_ispravka = CORRECTION_PROMPT_TEMPLATE.format(
         pitanje=pitanje,
         originalni_upit=originalni_upit,
@@ -378,22 +373,22 @@ def ispravi_sparql(originalni_upit, poruka_greske, pitanje):
             sparql_kod = ai_odgovor
         return sparql_kod.strip()
     except Exception as e:
-        print(f"❌ Greška pri ispravljanju SPARQL-a (Qwen): {e}")
+        print(f"Greška pri ispravljanju SPARQL-a: {e}")
         return None
 
 
 def provjeri_logiku_upita(originalni_upit, pitanje):
-    print(f"\n🔍 PROVJERA LOGIKE (Qwen): Analiziram upit za pitanje: '{pitanje}'")
+    print(f"\nPROVJERA LOGIKE: Analiziram upit za pitanje: '{pitanje}'")
     detailed_prompt = LOGIC_CHECK_PROMPT_TEMPLATE.format(
         pitanje=pitanje, originalni_upit=originalni_upit
     )
     try:
         ai_odgovor = _pozovi_qwen(detailed_prompt)
         if "ISPRAVNO" in ai_odgovor.upper() and "NE" not in ai_odgovor.upper():
-            print("✅ Logička provjera: upit je sintaktički i semantički ispravan.")
+            print("Logička provjera: upit je sintaktički i semantički ispravan.")
             return "ISPRAVNO"
         else:
-            print("⚠️  Logička provjera otkrila probleme:")
+            print("Logička provjera otkrila probleme:")
             prompt_za_ispravak = ANALYSIS_CORRECTION_PROMPT_TEMPLATE.format(
                 analiza=ai_odgovor,
                 pitanje=pitanje,
@@ -403,5 +398,5 @@ def provjeri_logiku_upita(originalni_upit, pitanje):
                 ispravljeni_upit = ispravljeni_upit.split("```sparql\n")[1].split("```")[0]
             return ispravljeni_upit.strip()
     except Exception as e:
-        print(f"❌ Greška pri provjeri logike (Qwen): {e}")
+        print(f"Greška pri provjeri logike: {e}")
         return None
