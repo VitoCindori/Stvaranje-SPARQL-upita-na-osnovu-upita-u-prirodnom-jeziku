@@ -4,9 +4,9 @@ U nastavku sijede koraci pravilne instalacije programa
 
 ## 1. Instalacija ovisnosti
 
-Provjeri je li na sustavu instaliran Python (preporučena verzija: Python 3.12 ili novija).
+Potrebno je provjeriti je li na sustavu instaliran Python (preporučena verzija: Python 3.12 ili novija).
 
-U korijenskoj mapi projekta otvori terminal i instaliraj potrebne biblioteke:
+Potom, u korijenskoj mapi projekta otvorite terminal i instalirajte potrebne biblioteke:
 
 ```bash
 pip install -r requirements.txt
@@ -16,9 +16,9 @@ pip install -r requirements.txt
 
 Za rad aplikacije potrebno je konfigurirati API ključeve za podržane AI servise.
 
-1. Pronađi datoteku `.env.example` u korijenskoj mapi projekta.
-2. Napravi njezinu kopiju i preimenuj je u `.env`.
-3. Uredi `.env` datoteku i unesi svoje API ključeve:
+1. U mapi nalazi se datoteka `.env.example` .
+2. Potrebno je napraviti njezinu kopiju i preimenovati je u `.env`.
+3. `.env` datoteka u sebi sadrži sve ključece API servisa
 
 ```env
 API_KEY_GPT=your_openai_api_key
@@ -37,17 +37,18 @@ Primjer pokretanja modela putem Ollame:
 
 ollama run qwen3:latest
 
-Ako koristiš lokalni model, provjeri da su adresa poslužitelja i port ispravno konfigurirani u kodu kao ´´´BASE_URL´´´
+Ako se koristi lokalni model, potrebno je provjeriti jesu li adresa poslužitelja i port ispravno konfigurirani u kodu kao ```BASE_URL``` te ako se ne koristi ```llama3.1:8B``` potrebno je promjeniti varijablu ```MODEL_NAME``` u željeni model
 
 > Napomena: Za korištenje lokalnog modela nije potreban API ključ vanjskog pružatelja usluga, ali model mora biti pokrenut prije pokretanja aplikacije.
 
 
 ## 3. Pokretanje aplikacije
 
-Nakon instalacije ovisnosti i konfiguracije API ključeva, aplikaciju možeš pokrenuti naredbom:
+Nakon instalacije ovisnosti i konfiguracije API ključeva, aplikacija se pokreće naredbom pokrenuti naredbom:
 
-
-Ako projekt podržava dodatne argumente ili konfiguracijske opcije, one se mogu navesti prilikom pokretanja skripte.
+```bash
+python slanje_dohvat_podataka_final.py
+```
 
 ##4. Rješavanje problema pri pokretanju
 
