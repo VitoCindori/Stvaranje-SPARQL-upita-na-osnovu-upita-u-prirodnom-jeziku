@@ -1,0 +1,186 @@
+[
+  {
+    "pitanje": "Pronađi 10 skupova podataka i njihove naslove na engleskom jeziku.",
+    "sparql": "PREFIX dcat: <http://www.w3.org/ns/dcat#>\nPREFIX dct: <http://purl.org/dc/terms/>\n\nSELECT DISTINCT ?dataset ?title\nWHERE {\n  ?dataset a dcat:Dataset .\n  ?dataset dct:title ?title .\n  FILTER (lang(?title) = \"en\")\n}\nLIMIT 10"
+  },
+  {
+    "pitanje": "Prikaži mi 5 skupova podataka objavljenih nakon 2020. godine.",
+    "sparql": "PREFIX dcat: <http://www.w3.org/ns/dcat#>\nPREFIX dct: <http://purl.org/dc/terms/>\nPREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\n\nSELECT DISTINCT ?dataset ?issued\nWHERE {\n  ?dataset a dcat:Dataset .\n  ?dataset dct:issued ?issued .\n  FILTER (?issued > \"2020-12-31\"^^xsd:date && ?issued < \"2026-12-31\"^^xsd:date)\n}\nLIMIT 5"
+  },
+  {
+    "pitanje": "Pronađi sve skupove podataka čiji naslovi sadrže riječ 'climate'.",
+    "sparql": "PREFIX dcat: <http://www.w3.org/ns/dcat#>\nPREFIX dct: <http://purl.org/dc/terms/>\n\nSELECT DISTINCT ?dataset ?title\nWHERE {\n  ?dataset a dcat:Dataset .\n  ?dataset dct:title ?title .\n  FILTER (CONTAINS(LCASE(STR(?title)), \"climate\"))\n}\nLIMIT 20"
+  },
+  {
+    "pitanje": "Prikaži mi 15 skupova podataka i njihove opise na engleskom jeziku.",
+    "sparql": "PREFIX dcat: <http://www.w3.org/ns/dcat#>\nPREFIX dct: <http://purl.org/dc/terms/>\n\nSELECT DISTINCT ?dataset ?title ?description\nWHERE {\n  ?dataset a dcat:Dataset .\n  ?dataset dct:title ?title .\n  ?dataset dct:description ?description .\n  FILTER (lang(?title) = \"en\" && lang(?description) = \"en\")\n}\nLIMIT 15"
+  },
+  {
+    "pitanje": "Pronađi skupove podataka čiji naslovi sadrže riječ 'energy'.",
+    "sparql": "PREFIX dcat: <http://www.w3.org/ns/dcat#>\nPREFIX dct: <http://purl.org/dc/terms/>\n\nSELECT DISTINCT ?dataset ?title\nWHERE {\n  ?dataset a dcat:Dataset .\n  ?dataset dct:title ?title .\n  FILTER (CONTAINS(LCASE(STR(?title)), \"energy\"))\n}\nLIMIT 20"
+  },
+  {
+    "pitanje": "Pronađi 10 skupova podataka koji se odnose na 'transport' ili 'mobility'.",
+    "sparql": "PREFIX dcat: <http://www.w3.org/ns/dcat#>\nPREFIX dct: <http://purl.org/dc/terms/>\n\nSELECT DISTINCT ?dataset ?title\nWHERE {\n  ?dataset a dcat:Dataset .\n  ?dataset dct:title ?title .\n  FILTER (\n    CONTAINS(LCASE(STR(?title)), \"transport\") ||\n    CONTAINS(LCASE(STR(?title)), \"mobility\")\n  )\n}\nLIMIT 10"
+  },
+  {
+    "pitanje": "Pronađi skupove podataka o 'health' objavljene nakon 2019. godine.",
+    "sparql": "PREFIX dcat: <http://www.w3.org/ns/dcat#>\nPREFIX dct: <http://purl.org/dc/terms/>\nPREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\n\nSELECT DISTINCT ?dataset ?title ?issued\nWHERE {\n  ?dataset a dcat:Dataset .\n  ?dataset dct:title ?title .\n  ?dataset dct:issued ?issued .\n  ?dataset dcat:theme <http://publications.europa.eu/resource/authority/data-theme/HEAL> .\n  FILTER (CONTAINS(LCASE(STR(?title)), \"health\"))\n  FILTER (?issued > \"2019-12-31\"^^xsd:date && ?issued <= xsd:date(NOW()))\n}\nLIMIT 10"
+  },
+  {
+    "pitanje": "Prikaži mi skupove podataka čiji naslovi ili opisi sadrže riječ 'agriculture'.",
+    "sparql": "PREFIX dcat: <http://www.w3.org/ns/dcat#>\nPREFIX dct: <http://purl.org/dc/terms/>\n\nSELECT DISTINCT ?dataset ?title\nWHERE {\n  ?dataset a dcat:Dataset .\n  ?dataset dct:title ?title .\n  OPTIONAL { ?dataset dct:description ?desc }\n  FILTER (\n    CONTAINS(LCASE(STR(?title)), \"agriculture\") ||\n    CONTAINS(LCASE(STR(?desc)), \"agriculture\")\n  )\n}\nLIMIT 10"
+  },
+  {
+    "pitanje": "Pronađi 20 skupova podataka vezanih uz 'Croatia' ili 'Hrvatska'.",
+    "sparql": "PREFIX dcat: <http://www.w3.org/ns/dcat#>\nPREFIX dct: <http://purl.org/dc/terms/>\n\nSELECT DISTINCT ?dataset ?title\nWHERE {\n  ?dataset a dcat:Dataset .\n  ?dataset dct:title ?title .\n  FILTER (\n    CONTAINS(LCASE(STR(?title)), \"croatia\") ||\n    CONTAINS(LCASE(STR(?title)), \"hrvatska\")\n  )\n}\nLIMIT 20"
+  },
+  {
+    "pitanje": "Pronađi skupove podataka o 'education' koji imaju opis na engleskom.",
+    "sparql": "PREFIX dcat: <http://www.w3.org/ns/dcat#>\nPREFIX dct: <http://purl.org/dc/terms/>\n\nSELECT DISTINCT ?dataset ?title ?description\nWHERE {\n  ?dataset a dcat:Dataset .\n  ?dataset dct:title ?title .\n  ?dataset dct:description ?description .\n  FILTER (\n    CONTAINS(LCASE(STR(?title)), \"education\") &&\n    lang(?description) = \"en\"\n  )\n}\nLIMIT 10"
+  },
+  {
+    "pitanje": "Prikaži mi naslove i opise 10 skupova podataka o 'artificial intelligence'.",
+    "sparql": "PREFIX dcat: <http://www.w3.org/ns/dcat#>\nPREFIX dct: <http://purl.org/dc/terms/>\n\nSELECT DISTINCT ?dataset ?title ?description\nWHERE {\n  ?dataset a dcat:Dataset .\n  ?dataset dct:title ?title .\n  ?dataset dct:description ?description .\n  FILTER (\n    CONTAINS(LCASE(STR(?title)), \"artificial intelligence\") ||\n    CONTAINS(LCASE(STR(?description)), \"artificial intelligence\")\n  )\n  FILTER (lang(?title) = \"en\")\n}\nLIMIT 10"
+  },
+  {
+    "pitanje": "Pronađi skupove podataka koji imaju distribuciju u CSV formatu.",
+    "sparql": "PREFIX dcat: <http://www.w3.org/ns/dcat#>\nPREFIX dct: <http://purl.org/dc/terms/>\n\nSELECT DISTINCT ?dataset ?title ?format\nWHERE {\n  ?dataset a dcat:Dataset .\n  ?dataset dct:title ?title .\n  ?dataset dcat:distribution ?dist .\n  ?dist dct:format ?format .\n  FILTER (CONTAINS(LCASE(STR(?format)), \"csv\"))\n}\nLIMIT 10"
+  },
+  {
+    "pitanje": "Prikaži mi skupove podataka o 'water quality' s njihovim izdavačima.",
+    "sparql": "PREFIX dcat: <http://www.w3.org/ns/dcat#>\nPREFIX dct: <http://purl.org/dc/terms/>\nPREFIX foaf: <http://xmlns.com/foaf/0.1/>\n\nSELECT DISTINCT ?dataset ?title ?publisherName\nWHERE {\n  ?dataset a dcat:Dataset .\n  ?dataset dct:title ?title .\n  ?dataset dct:publisher ?publisher .\n  ?publisher foaf:name ?publisherName .\n  FILTER (CONTAINS(LCASE(STR(?title)), \"water quality\"))\n}\nLIMIT 10"
+  },
+  {
+    "pitanje": "Pronađi skupove podataka o 'COVID' objavljene između 2020. i 2022. godine.",
+    "sparql": "PREFIX dcat: <http://www.w3.org/ns/dcat#>\nPREFIX dct: <http://purl.org/dc/terms/>\nPREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\n\nSELECT DISTINCT ?dataset ?title ?issued\nWHERE {\n  ?dataset a dcat:Dataset .\n  ?dataset dct:title ?title .\n  ?dataset dct:issued ?issued .\n  ?dataset dcat:theme <http://publications.europa.eu/resource/authority/data-theme/HEAL> .\n  FILTER (CONTAINS(LCASE(STR(?title)), \"covid\"))\n  FILTER (?issued >= \"2020-01-01\"^^xsd:date && ?issued <= \"2022-12-31\"^^xsd:date)\n}\nLIMIT 20"
+  },
+  {
+    "pitanje": "Prikaži mi 10 skupova podataka o 'economy' i njihove naslove i opise.",
+    "sparql": "PREFIX dcat: <http://www.w3.org/ns/dcat#>\nPREFIX dct: <http://purl.org/dc/terms/>\n\nSELECT DISTINCT ?dataset ?title ?description\nWHERE {\n  ?dataset a dcat:Dataset .\n  ?dataset dct:title ?title .\n  ?dataset dct:description ?description .\n  FILTER (CONTAINS(LCASE(STR(?title)), \"economy\"))\n  FILTER (lang(?title) = \"en\" && lang(?description) = \"en\")\n}\nLIMIT 10"
+  },
+  {
+    "pitanje": "Ima li podataka o moru?",
+    "sparql": "PREFIX dcat: <http://www.w3.org/ns/dcat#>\nPREFIX dct: <http://purl.org/dc/terms/>\n\nSELECT DISTINCT ?dataset ?title\nWHERE {\n  ?dataset a dcat:Dataset .\n  ?dataset dct:title ?title .\n  FILTER (\n    CONTAINS(LCASE(STR(?title)), \"marine\") ||\n    CONTAINS(LCASE(STR(?title)), \"sea\") ||\n    CONTAINS(LCASE(STR(?title)), \"ocean\")\n  )\n}\nLIMIT 10"
+  },
+  {
+    "pitanje": "Što znate o poljoprivredi u Europi?",
+    "sparql": "PREFIX dcat: <http://www.w3.org/ns/dcat#>\nPREFIX dct: <http://purl.org/dc/terms/>\n\nSELECT DISTINCT ?dataset ?title\nWHERE {\n  ?dataset a dcat:Dataset .\n  ?dataset dct:title ?title .\n  ?dataset dcat:theme <http://publications.europa.eu/resource/authority/data-theme/AGRI> .\n  FILTER (lang(?title) = \"en\")\n}\nLIMIT 10"
+  },
+  {
+    "pitanje": "Daj mi nešto o prometu.",
+    "sparql": "PREFIX dcat: <http://www.w3.org/ns/dcat#>\nPREFIX dct: <http://purl.org/dc/terms/>\n\nSELECT DISTINCT ?dataset ?title\nWHERE {\n  ?dataset a dcat:Dataset .\n  ?dataset dct:title ?title .\n  FILTER (\n    CONTAINS(LCASE(STR(?title)), \"transport\") ||\n    CONTAINS(LCASE(STR(?title)), \"traffic\") ||\n    CONTAINS(LCASE(STR(?title)), \"mobility\")\n  )\n}\nLIMIT 10"
+  },
+  {
+    "pitanje": "Pronađi podatke o 'renewable energy' sortirane po datumu objave.",
+    "sparql": "PREFIX dcat: <http://www.w3.org/ns/dcat#>\nPREFIX dct: <http://purl.org/dc/terms/>\n\nSELECT DISTINCT ?dataset ?title ?issued\nWHERE {\n  ?dataset a dcat:Dataset .\n  ?dataset dct:title ?title .\n  ?dataset dct:issued ?issued .\n  FILTER (\n    CONTAINS(LCASE(STR(?title)), \"renewable energy\") ||\n    CONTAINS(LCASE(STR(?title)), \"renewable\")\n  )\n  FILTER (lang(?title) = \"en\")\n}\nORDER BY DESC(?issued)\nLIMIT 10"
+  },
+  {
+    "pitanje": "Koliko skupova podataka postoji o temi 'finance'?",
+    "sparql": "PREFIX dcat: <http://www.w3.org/ns/dcat#>\n\nSELECT (COUNT(?dataset) AS ?totalFinanceDatasets)\nWHERE {\n  ?dataset a dcat:Dataset .\n  ?dataset dcat:theme <http://publications.europa.eu/resource/authority/data-theme/ECON> .\n}"
+  },
+  {
+    "pitanje": "Prikaži mi 10 skupova podataka o zdravlju s njihovim opisima na engleskom.",
+    "sparql": "PREFIX dcat: <http://www.w3.org/ns/dcat#>\nPREFIX dct: <http://purl.org/dc/terms/>\n\nSELECT DISTINCT ?dataset ?title ?description\nWHERE {\n  ?dataset a dcat:Dataset .\n  ?dataset dct:title ?title .\n  ?dataset dct:description ?description .\n  ?dataset dcat:theme <http://publications.europa.eu/resource/authority/data-theme/HEAL> .\n  FILTER (lang(?title) = \"en\" && lang(?description) = \"en\")\n}\nLIMIT 10"
+  },
+  {
+    "pitanje": "Koliko skupova podataka postoji o transportu?",
+    "sparql": "PREFIX dcat: <http://www.w3.org/ns/dcat#>\n\nSELECT (COUNT(?dataset) AS ?totalTransportDatasets)\nWHERE {\n  ?dataset a dcat:Dataset .\n  ?dataset dcat:theme <http://publications.europa.eu/resource/authority/data-theme/TRAN> .\n}"
+  },
+  {
+    "pitanje": "Pronađi skupove podataka o energiji objavljene između 2018. i 2022. godine.",
+    "sparql": "PREFIX dcat: <http://www.w3.org/ns/dcat#>\nPREFIX dct: <http://purl.org/dc/terms/>\nPREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\n\nSELECT DISTINCT ?dataset ?title ?issued\nWHERE {\n  ?dataset a dcat:Dataset .\n  ?dataset dct:title ?title .\n  ?dataset dct:issued ?issued .\n  ?dataset dcat:theme <http://publications.europa.eu/resource/authority/data-theme/ENER> .\n  FILTER (lang(?title) = \"en\")\n  FILTER (?issued >= \"2018-01-01\"^^xsd:date && ?issued <= \"2022-12-31\"^^xsd:date)\n}\nLIMIT 15"
+  },
+  {
+    "pitanje": "Prikaži mi skupove podataka o okolišu s njihovim izdavačima.",
+    "sparql": "PREFIX dcat: <http://www.w3.org/ns/dcat#>\nPREFIX dct: <http://purl.org/dc/terms/>\nPREFIX foaf: <http://xmlns.com/foaf/0.1/>\n\nSELECT DISTINCT ?dataset ?title ?publisherName\nWHERE {\n  ?dataset a dcat:Dataset .\n  ?dataset dct:title ?title .\n  ?dataset dcat:theme <http://publications.europa.eu/resource/authority/data-theme/ENVI> .\n  ?dataset dct:publisher ?publisher .\n  ?publisher foaf:name ?publisherName .\n  FILTER (lang(?title) = \"en\")\n}\nLIMIT 10"
+  },
+  {
+    "pitanje": "Pronađi 20 skupova podataka o obrazovanju objavljenih nakon 2015. godine.",
+    "sparql": "PREFIX dcat: <http://www.w3.org/ns/dcat#>\nPREFIX dct: <http://purl.org/dc/terms/>\nPREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\n\nSELECT DISTINCT ?dataset ?title ?issued\nWHERE {\n  ?dataset a dcat:Dataset .\n  ?dataset dct:title ?title .\n  ?dataset dct:issued ?issued .\n  ?dataset dcat:theme <http://publications.europa.eu/resource/authority/data-theme/EDUC> .\n  FILTER (lang(?title) = \"en\")\n  FILTER (?issued > \"2015-12-31\"^^xsd:date && ?issued <= xsd:date(NOW()))\n}\nLIMIT 20"
+  },
+  {
+    "pitanje": "Prikaži mi naslove i opise skupova podataka o tehnologiji.",
+    "sparql": "PREFIX dcat: <http://www.w3.org/ns/dcat#>\nPREFIX dct: <http://purl.org/dc/terms/>\n\nSELECT DISTINCT ?dataset ?title ?description\nWHERE {\n  ?dataset a dcat:Dataset .\n  ?dataset dct:title ?title .\n  ?dataset dct:description ?description .\n  ?dataset dcat:theme <http://publications.europa.eu/resource/authority/data-theme/TECH> .\n  FILTER (lang(?title) = \"en\" && lang(?description) = \"en\")\n}\nLIMIT 10"
+  },
+  {
+    "pitanje": "Koliko skupova podataka postoji o vladavini i javnoj upravi?",
+    "sparql": "PREFIX dcat: <http://www.w3.org/ns/dcat#>\n\nSELECT (COUNT(?dataset) AS ?totalGovDatasets)\nWHERE {\n  ?dataset a dcat:Dataset .\n  ?dataset dcat:theme <http://publications.europa.eu/resource/authority/data-theme/GOVE> .\n}"
+  },
+  {
+    "pitanje": "Pronađi skupove podataka o društvu koji imaju CSV distribuciju.",
+    "sparql": "PREFIX dcat: <http://www.w3.org/ns/dcat#>\nPREFIX dct: <http://purl.org/dc/terms/>\n\nSELECT DISTINCT ?dataset ?title\nWHERE {\n  ?dataset a dcat:Dataset .\n  ?dataset dct:title ?title .\n  ?dataset dcat:theme <http://publications.europa.eu/resource/authority/data-theme/SOCI> .\n  ?dataset dcat:distribution ?dist .\n  ?dist dct:format <http://publications.europa.eu/resource/authority/file-type/CSV> .\n  FILTER (lang(?title) = \"en\")\n}\nLIMIT 10"
+  },
+  {
+    "pitanje": "Prikaži mi 15 skupova podataka o poljoprivredi objavljenih između 2019. i 2023. s opisima.",
+    "sparql": "PREFIX dcat: <http://www.w3.org/ns/dcat#>\nPREFIX dct: <http://purl.org/dc/terms/>\nPREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\n\nSELECT DISTINCT ?dataset ?title ?description ?issued\nWHERE {\n  ?dataset a dcat:Dataset .\n  ?dataset dct:title ?title .\n  ?dataset dct:description ?description .\n  ?dataset dct:issued ?issued .\n  ?dataset dcat:theme <http://publications.europa.eu/resource/authority/data-theme/AGRI> .\n  FILTER (lang(?title) = \"en\" && lang(?description) = \"en\")\n  FILTER (?issued >= \"2019-01-01\"^^xsd:date && ?issued <= \"2023-12-31\"^^xsd:date)\n}\nORDER BY DESC(?issued)\nLIMIT 15"
+  },
+  {
+    "pitanje": "Pronađi skupove podataka o regionalnoj statistici sortirane po datumu objave.",
+    "sparql": "PREFIX dcat: <http://www.w3.org/ns/dcat#>\nPREFIX dct: <http://purl.org/dc/terms/>\nPREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\n\nSELECT DISTINCT ?dataset ?title ?issued\nWHERE {\n  ?dataset a dcat:Dataset .\n  ?dataset dct:title ?title .\n  ?dataset dct:issued ?issued .\n  ?dataset dcat:theme <http://publications.europa.eu/resource/authority/data-theme/REGI> .\n  FILTER (lang(?title) = \"en\")\n  FILTER (?issued <= xsd:date(NOW()))\n}\nORDER BY DESC(?issued)\nLIMIT 10"
+  },
+  {
+    "pitanje": "Prikaži mi skupove podataka o ekonomiji za Hrvatsku.",
+    "sparql": "PREFIX dcat: <http://www.w3.org/ns/dcat#>\nPREFIX dct: <http://purl.org/dc/terms/>\n\nSELECT DISTINCT ?dataset ?title\nWHERE {\n  ?dataset a dcat:Dataset .\n  ?dataset dct:title ?title .\n  ?dataset dcat:theme <http://publications.europa.eu/resource/authority/data-theme/ECON> .\n  ?dataset dct:spatial <http://publications.europa.eu/resource/authority/country/HRV> .\n  FILTER (lang(?title) = \"en\")\n}\nLIMIT 10"
+  },
+  {
+    "pitanje": "Pronađi skupove podataka o zdravlju za Njemačku objavljene nakon 2020.",
+    "sparql": "PREFIX dcat: <http://www.w3.org/ns/dcat#>\nPREFIX dct: <http://purl.org/dc/terms/>\nPREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\n\nSELECT DISTINCT ?dataset ?title ?issued\nWHERE {\n  ?dataset a dcat:Dataset .\n  ?dataset dct:title ?title .\n  ?dataset dct:issued ?issued .\n  ?dataset dcat:theme <http://publications.europa.eu/resource/authority/data-theme/HEAL> .\n  ?dataset dct:spatial <http://publications.europa.eu/resource/authority/country/DEU> .\n  FILTER (lang(?title) = \"en\")\n  FILTER (?issued > \"2020-12-31\"^^xsd:date)\n}\nLIMIT 10"
+  },
+  {
+    "pitanje": "Koliko skupova podataka o okolišu postoji za Francusku?",
+    "sparql": "PREFIX dcat: <http://www.w3.org/ns/dcat#>\nPREFIX dct: <http://purl.org/dc/terms/>\n\nSELECT (COUNT(?dataset) AS ?total)\nWHERE {\n  ?dataset a dcat:Dataset .\n  ?dataset dcat:theme <http://publications.europa.eu/resource/authority/data-theme/ENVI> .\n  ?dataset dct:spatial <http://publications.europa.eu/resource/authority/country/FRA> .\n}"
+  },
+  {
+    "pitanje": "Prikaži mi skupove podataka o transportu u JSON formatu s opisima.",
+    "sparql": "PREFIX dcat: <http://www.w3.org/ns/dcat#>\nPREFIX dct: <http://purl.org/dc/terms/>\n\nSELECT DISTINCT ?dataset ?title ?description\nWHERE {\n  ?dataset a dcat:Dataset .\n  ?dataset dct:title ?title .\n  ?dataset dct:description ?description .\n  ?dataset dcat:theme <http://publications.europa.eu/resource/authority/data-theme/TRAN> .\n  ?dataset dcat:distribution ?dist .\n  ?dist dct:format <http://publications.europa.eu/resource/authority/file-type/JSON> .\n  FILTER (lang(?title) = \"en\" && lang(?description) = \"en\")\n}\nLIMIT 10"
+  },
+  {
+    "pitanje": "Nađi mi 10 datasetova koji se odnose na obiteljsko nasilje u Hrvatskoj.",
+    "sparql": "PREFIX dcat: <http://www.w3.org/ns/dcat#>\nPREFIX dct: <http://purl.org/dc/terms/>\n\nSELECT DISTINCT ?dataset ?title\nWHERE {\n  ?dataset a dcat:Dataset .\n  ?dataset dct:title ?title .\n  ?dataset dcat:theme <http://publications.europa.eu/resource/authority/data-theme/SOCI> .\n  ?dataset dct:spatial <http://publications.europa.eu/resource/authority/country/HRV> .\n  FILTER(CONTAINS(LCASE(STR(?title)), \"domestic violence\") || CONTAINS(LCASE(STR(?title)), \"family violence\"))\n  FILTER(LANG(?title) = \"en\")\n}\nLIMIT 10"
+  },
+  {
+    "pitanje": "Prikaži mi 10 datasetova o umjetnoj inteligenciji u CSV formatu objavljenih između 2021. i 2024. godine.",
+    "sparql": "PREFIX dcat: <http://www.w3.org/ns/dcat#>\nPREFIX dct: <http://purl.org/dc/terms/>\nPREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\n\nSELECT DISTINCT ?dataset ?title ?issued\nWHERE {\n  ?dataset a dcat:Dataset .\n  ?dataset dct:title ?title .\n  ?dataset dct:issued ?issued .\n  ?dataset dcat:theme <http://publications.europa.eu/resource/authority/data-theme/TECH> .\n  ?dataset dcat:distribution ?dist .\n  ?dist dct:format <http://publications.europa.eu/resource/authority/file-type/CSV> .\n  FILTER(LANG(?title) = \"en\")\n  FILTER(CONTAINS(LCASE(STR(?title)), \"artificial intelligence\") || REGEX(LCASE(STR(?title)), \"(^|\\\\s)ai(\\\\s|$)\"))\n  FILTER(?issued >= \"2021-01-01\"^^xsd:date && ?issued <= \"2024-12-31\"^^xsd:date)\n}\nORDER BY DESC(?issued)\nLIMIT 10"
+  },
+  {
+    "pitanje": "Pronađi skupove podataka o solarnoj energiji sortirane po datumu objave.",
+    "sparql": "PREFIX dcat: <http://www.w3.org/ns/dcat#>\nPREFIX dct: <http://purl.org/dc/terms/>\n\nSELECT DISTINCT ?dataset ?title ?issued\nWHERE {\n  ?dataset a dcat:Dataset .\n  ?dataset dct:title ?title .\n  ?dataset dct:issued ?issued .\n  ?dataset dcat:theme <http://publications.europa.eu/resource/authority/data-theme/ENER> .\n  FILTER(LANG(?title) = \"en\")\n  FILTER(\n    CONTAINS(LCASE(STR(?title)), \"solar energy\") ||\n    CONTAINS(LCASE(STR(?title)), \"solar power\") ||\n    CONTAINS(LCASE(STR(?title)), \"photovoltaic\")\n  )\n}\nORDER BY DESC(?issued)\nLIMIT 15"
+  },
+  {
+    "pitanje": "Koliko skupova podataka o raku postoji za Italiju?",
+    "sparql": "PREFIX dcat: <http://www.w3.org/ns/dcat#>\nPREFIX dct: <http://purl.org/dc/terms/>\n\nSELECT (COUNT(?dataset) AS ?total)\nWHERE {\n  ?dataset a dcat:Dataset .\n  ?dataset dcat:theme <http://publications.europa.eu/resource/authority/data-theme/HEAL> .\n  ?dataset dct:spatial <http://publications.europa.eu/resource/authority/country/ITA> .\n  ?dataset dct:title ?title .\n  FILTER(CONTAINS(LCASE(STR(?title)), \"cancer\") || CONTAINS(LCASE(STR(?title)), \"oncology\"))\n}"
+  },
+  {
+    "pitanje": "Prikaži mi skupove podataka o nezaposlenosti u Španjolskoj s opisima na engleskom objavljene nakon 2018.",
+    "sparql": "PREFIX dcat: <http://www.w3.org/ns/dcat#>\nPREFIX dct: <http://purl.org/dc/terms/>\nPREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\n\nSELECT DISTINCT ?dataset ?title ?description ?issued\nWHERE {\n  ?dataset a dcat:Dataset .\n  ?dataset dct:title ?title .\n  ?dataset dct:description ?description .\n  ?dataset dct:issued ?issued .\n  ?dataset dcat:theme <http://publications.europa.eu/resource/authority/data-theme/ECON> .\n  ?dataset dct:spatial <http://publications.europa.eu/resource/authority/country/ESP> .\n  FILTER(LANG(?title) = \"en\" && LANG(?description) = \"en\")\n  FILTER(CONTAINS(LCASE(STR(?title)), \"unemployment\") || CONTAINS(LCASE(STR(?title)), \"jobless\"))\n  FILTER(?issued > \"2018-12-31\"^^xsd:date)\n}\nORDER BY DESC(?issued)\nLIMIT 10"
+  },
+  {
+    "pitanje": "Pronađi 10 skupova podataka o onečišćenju zraka u JSON ili XML formatu.",
+    "sparql": "PREFIX dcat: <http://www.w3.org/ns/dcat#>\nPREFIX dct: <http://purl.org/dc/terms/>\n\nSELECT DISTINCT ?dataset ?title\nWHERE {\n  ?dataset a dcat:Dataset .\n  ?dataset dct:title ?title .\n  ?dataset dcat:theme <http://publications.europa.eu/resource/authority/data-theme/ENVI> .\n  ?dataset dcat:distribution ?dist .\n  ?dist dct:format ?format .\n  FILTER(\n    ?format = <http://publications.europa.eu/resource/authority/file-type/JSON> ||\n    ?format = <http://publications.europa.eu/resource/authority/file-type/XML>\n  )\n  FILTER(LANG(?title) = \"en\")\n  FILTER(\n    CONTAINS(LCASE(STR(?title)), \"air pollution\") ||\n    CONTAINS(LCASE(STR(?title)), \"air quality\") ||\n    CONTAINS(LCASE(STR(?title)), \"emission\")\n  )\n}\nLIMIT 10"
+  },
+  {
+    "pitanje": "Prikaži mi skupove podataka o digitalnoj ekonomiji s izdavačima, objavljene između 2020. i 2023. sortirane po datumu.",
+    "sparql": "PREFIX dcat: <http://www.w3.org/ns/dcat#>\nPREFIX dct: <http://purl.org/dc/terms/>\nPREFIX foaf: <http://xmlns.com/foaf/0.1/>\nPREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\n\nSELECT DISTINCT ?dataset ?title ?publisherName ?issued\nWHERE {\n  ?dataset a dcat:Dataset .\n  ?dataset dct:title ?title .\n  ?dataset dct:issued ?issued .\n  ?dataset dct:publisher ?publisher .\n  ?publisher foaf:name ?publisherName .\n  ?dataset dcat:theme <http://publications.europa.eu/resource/authority/data-theme/ECON> .\n  FILTER(LANG(?title) = \"en\")\n  FILTER(\n    CONTAINS(LCASE(STR(?title)), \"digital economy\") ||\n    CONTAINS(LCASE(STR(?title)), \"digitalisation\") ||\n    CONTAINS(LCASE(STR(?title)), \"digitalization\")\n  )\n  FILTER(?issued >= \"2020-01-01\"^^xsd:date && ?issued <= \"2023-12-31\"^^xsd:date)\n}\nORDER BY DESC(?issued)\nLIMIT 10"
+  },
+  {
+    "pitanje": "Nađi skupove podataka o migracijama i izbjeglicama za Njemačku ili Francusku.",
+    "sparql": "PREFIX dcat: <http://www.w3.org/ns/dcat#>\nPREFIX dct: <http://purl.org/dc/terms/>\n\nSELECT DISTINCT ?dataset ?title\nWHERE {\n  ?dataset a dcat:Dataset .\n  ?dataset dct:title ?title .\n  ?dataset dcat:theme <http://publications.europa.eu/resource/authority/data-theme/SOCI> .\n  ?dataset dct:spatial ?spatial .\n  FILTER(\n    ?spatial = <http://publications.europa.eu/resource/authority/country/DEU> ||\n    ?spatial = <http://publications.europa.eu/resource/authority/country/FRA>\n  )\n  FILTER(LANG(?title) = \"en\")\n  FILTER(\n    CONTAINS(LCASE(STR(?title)), \"migration\") ||\n    CONTAINS(LCASE(STR(?title)), \"refugee\") ||\n    CONTAINS(LCASE(STR(?title)), \"asylum\")\n  )\n}\nLIMIT 10"
+  },
+  {
+    "pitanje": "Prikaži mi skupove podataka o digitalnoj ekonomiji s izdavačima, objavljene između 2020. i 2023. sortirane po datumu.",
+    "sparql": "PREFIX dcat: <http://www.w3.org/ns/dcat#>\nPREFIX dct: <http://purl.org/dc/terms/>\nPREFIX foaf: <http://xmlns.com/foaf/0.1/>\nPREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\n\nSELECT DISTINCT ?dataset ?title ?publisherName ?issued\nWHERE {\n  ?dataset a dcat:Dataset .\n  ?dataset dct:title ?title .\n  ?dataset dct:issued ?issued .\n  ?dataset dct:publisher ?publisher .\n  ?publisher foaf:name ?publisherName .\n  ?dataset dcat:theme ?theme .\n  FILTER(\n    ?theme = <http://publications.europa.eu/resource/authority/data-theme/ECON> ||\n    ?theme = <http://publications.europa.eu/resource/authority/data-theme/TECH>\n  )\n  FILTER(LANG(?title) = \"en\")\n  FILTER(\n    CONTAINS(LCASE(STR(?title)), \"digital economy\") ||\n    CONTAINS(LCASE(STR(?title)), \"digitalisation\") ||\n    CONTAINS(LCASE(STR(?title)), \"digitalization\")\n  )\n  FILTER(?issued >= \"2020-01-01\"^^xsd:date && ?issued <= \"2023-12-31\"^^xsd:date)\n}\nORDER BY DESC(?issued)\nLIMIT 10"
+  },
+  {
+    "pitanje": "Pronađi skupove podataka koji se odnose na obrazovanje ili zdravlje.",
+    "sparql": "PREFIX dcat: <http://www.w3.org/ns/dcat#>\nPREFIX dct: <http://purl.org/dc/terms/>\n\nSELECT DISTINCT ?dataset ?title\nWHERE {\n  {\n    ?dataset a dcat:Dataset .\n    ?dataset dct:title ?title .\n    ?dataset dcat:theme <http://publications.europa.eu/resource/authority/data-theme/EDUC> .\n    FILTER(LANG(?title) = \"en\")\n  }\n  UNION\n  {\n    ?dataset a dcat:Dataset .\n    ?dataset dct:title ?title .\n    ?dataset dcat:theme <http://publications.europa.eu/resource/authority/data-theme/HEAL> .\n    FILTER(LANG(?title) = \"en\")\n  }\n}\nLIMIT 20"
+  },
+  {
+    "pitanje": "Prikaži mi skupove podataka o obnovljivim izvorima energije ili zaštiti okoliša objavljene nakon 2020. godine.",
+    "sparql": "PREFIX dcat: <http://www.w3.org/ns/dcat#>\nPREFIX dct: <http://purl.org/dc/terms/>\nPREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\n\nSELECT DISTINCT ?dataset ?title ?issued\nWHERE {\n  {\n    ?dataset a dcat:Dataset .\n    ?dataset dct:title ?title .\n    ?dataset dct:issued ?issued .\n    ?dataset dcat:theme <http://publications.europa.eu/resource/authority/data-theme/ENER> .\n    FILTER(LANG(?title) = \"en\")\n    FILTER(CONTAINS(LCASE(STR(?title)), \"renewable\") || CONTAINS(LCASE(STR(?title)), \"solar\") || CONTAINS(LCASE(STR(?title)), \"wind energy\"))\n    FILTER(?issued > \"2020-12-31\"^^xsd:date)\n  }\n  UNION\n  {\n    ?dataset a dcat:Dataset .\n    ?dataset dct:title ?title .\n    ?dataset dct:issued ?issued .\n    ?dataset dcat:theme <http://publications.europa.eu/resource/authority/data-theme/ENVI> .\n    FILTER(LANG(?title) = \"en\")\n    FILTER(CONTAINS(LCASE(STR(?title)), \"environmental protection\") || CONTAINS(LCASE(STR(?title)), \"conservation\"))\n    FILTER(?issued > \"2020-12-31\"^^xsd:date)\n  }\n}\nORDER BY DESC(?issued)\nLIMIT 15"
+  },
+  {
+    "pitanje": "Nađi mi skupove podataka o prometnoj infrastrukturi iz Hrvatske ili Njemačke.",
+    "sparql": "PREFIX dcat: <http://www.w3.org/ns/dcat#>\nPREFIX dct: <http://purl.org/dc/terms/>\n\nSELECT DISTINCT ?dataset ?title ?spatial\nWHERE {\n  {\n    ?dataset a dcat:Dataset .\n    ?dataset dct:title ?title .\n    ?dataset dct:spatial ?spatial .\n    ?dataset dcat:theme <http://publications.europa.eu/resource/authority/data-theme/TRAN> .\n    ?dataset dct:spatial <http://publications.europa.eu/resource/authority/country/HRV> .\n    FILTER(LANG(?title) = \"en\")\n    FILTER(CONTAINS(LCASE(STR(?title)), \"transport\") || CONTAINS(LCASE(STR(?title)), \"infrastructure\") || CONTAINS(LCASE(STR(?title)), \"road\"))\n  }\n  UNION\n  {\n    ?dataset a dcat:Dataset .\n    ?dataset dct:title ?title .\n    ?dataset dct:spatial ?spatial .\n    ?dataset dcat:theme <http://publications.europa.eu/resource/authority/data-theme/TRAN> .\n    ?dataset dct:spatial <http://publications.europa.eu/resource/authority/country/DEU> .\n    FILTER(LANG(?title) = \"en\")\n    FILTER(CONTAINS(LCASE(STR(?title)), \"transport\") || CONTAINS(LCASE(STR(?title)), \"infrastructure\") || CONTAINS(LCASE(STR(?title)), \"road\"))\n  }\n}\nLIMIT 15"
+  }
+]

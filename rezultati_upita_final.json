@@ -1,0 +1,74 @@
+{
+  "head": {
+    "link": [],
+    "vars": [
+      "dataset"
+    ]
+  },
+  "results": {
+    "distinct": false,
+    "ordered": true,
+    "bindings": [
+      {
+        "dataset": {
+          "type": "uri",
+          "value": "http://data.europa.eu/88u/dataset/0800af55-8e56-49a0-8986-aa55151d0440"
+        }
+      },
+      {
+        "dataset": {
+          "type": "uri",
+          "value": "http://data.europa.eu/88u/dataset/rezultati-monitoringa-vazdukha-grada-shaptsa-20-26-06-2022-merno-mesto-vatrogasni-dom"
+        }
+      },
+      {
+        "dataset": {
+          "type": "uri",
+          "value": "http://data.europa.eu/88u/dataset/22984271-bundesamt-fur-statistik-bfs"
+        }
+      },
+      {
+        "dataset": {
+          "type": "uri",
+          "value": "http://data.europa.eu/88u/dataset/09bd95e6-091a-4b04-8984-1a7ea23fcf9d"
+        }
+      },
+      {
+        "dataset": {
+          "type": "uri",
+          "value": "http://data.europa.eu/88u/dataset/244310-11"
+        }
+      },
+      {
+        "dataset": {
+          "type": "uri",
+          "value": "http://data.europa.eu/88u/dataset/244310-16"
+        }
+      },
+      {
+        "dataset": {
+          "type": "uri",
+          "value": "http://data.europa.eu/88u/dataset/496c5c40-1c1e-46aa-b516-a62bdd1fcd06"
+        }
+      },
+      {
+        "dataset": {
+          "type": "uri",
+          "value": "http://data.europa.eu/88u/dataset/6c5cefb1-65ef-464e-83fd-6b6ba0bf64cd"
+        }
+      },
+      {
+        "dataset": {
+          "type": "uri",
+          "value": "http://data.europa.eu/88u/dataset/34fc887b-be29-47bf-a2b3-67428d47d434"
+        }
+      },
+      {
+        "dataset": {
+          "type": "uri",
+          "value": "http://data.europa.eu/88u/dataset/b2fa2c51-77a6-4ed2-be0d-36b81ab57ea7"
+        }
+      }
+    ]
+  }
+}
