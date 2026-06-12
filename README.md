@@ -33,7 +33,7 @@ API_KEY_CLAUDE=your_anthropic_api_key
 API_KEY_LLAMA=your_llama_api_key
 ```
 
-> Napomena: Datoteku `.env` nemoj dodavati u Git repozitorij jer sadrži osjetljive podatke.
+> Napomena: Datoteku `.env` se ne dodaje u Git repozitorij jer sadrži osjetljive podatke.
 
 Korištenje lokalnog modela (opcionalno)
 
@@ -45,12 +45,11 @@ ollama run qwen3:latest
 
 Ako se koristi lokalni model, potrebno je provjeriti jesu li adresa poslužitelja i port ispravno konfigurirani u kodu kao ```BASE_URL``` te ako se ne koristi ```llama3.1:8B``` potrebno je promjeniti varijablu ```MODEL_NAME``` u željeni model
 
-> Napomena: Za korištenje lokalnog modela nije potreban API ključ vanjskog pružatelja usluga, ali model mora biti pokrenut prije pokretanja aplikacije.
 
 
 ## 3. Pokretanje aplikacije
 
-Nakon instalacije ovisnosti i konfiguracije API ključeva, aplikacija se pokreće naredbom pokrenuti naredbom:
+Nakon instalacije ovisnosti i konfiguracije API ključeva, aplikacija se pokreće naredbom:
 
 ```bash
 python slanje_dohvat_podataka_final.py
