@@ -50,7 +50,7 @@ Nakon instalacije ovisnosti i konfiguracije API ključeva, aplikacija se pokreć
 python slanje_dohvat_podataka_final.py
 ```
 
-##4. Rješavanje problema pri pokretanju
+## 4. Rješavanje problema pri pokretanju
 
 Prilikom prvog pokretanja aplikacije može se pojaviti pogreška povezana s učitavanjem pojedinih modula ili biblioteka. Ova pojava nije povezana s logikom programa te se najčešće javlja samo pri inicijalnom pokretanju.
 
