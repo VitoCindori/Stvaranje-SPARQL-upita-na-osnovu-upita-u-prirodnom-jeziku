@@ -29,10 +29,22 @@ API_KEY_LLAMA=your_llama_api_key
 
 > Napomena: Datoteku `.env` nemoj dodavati u Git repozitorij jer sadrži osjetljive podatke.
 
+Korištenje lokalnog modela (opcionalno)
+
+Projekt također podržava korištenje lokalno pokrenutih AI modela. Prije pokretanja aplikacije potrebno je osigurati da je lokalni model aktivan i dostupan putem odgovarajućeg API-ja.
+
+Primjer pokretanja modela putem Ollame:
+
+ollama run qwen3:latest
+
+Ako koristiš lokalni model, provjeri da su adresa poslužitelja i port ispravno konfigurirani u datoteci .env ili konfiguracijskim postavkama projekta.
+
+Napomena: Za korištenje lokalnog modela nije potreban API ključ vanjskog pružatelja usluga, ali model mora biti pokrenut prije pokretanja aplikacije.
+
+
 ## 3. Pokretanje aplikacije
 
 Nakon instalacije ovisnosti i konfiguracije API ključeva, aplikaciju možeš pokrenuti naredbom:
-
 
 
 Ako projekt podržava dodatne argumente ili konfiguracijske opcije, one se mogu navesti prilikom pokretanja skripte.
